@@ -23,6 +23,7 @@ else
 			<th>
 				<div style="display:flex;justify-content: space-around;">
 					<input @bind-value="NewMessage" placeholder="New message..." />
+					<input type="checkbox" @bind-value="IsBase64" placeholder="IsBase64" />
 					<button class="ui button" type="button" @onclick="AddMessage">Add</button>
 				</div>
 			</th>

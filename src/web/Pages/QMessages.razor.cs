@@ -11,6 +11,7 @@ namespace web.Pages
 		public string? CurrentQueue { get; set; }
 
 		public bool ShowTable { get; set; } = false;
+		public bool IsBase64 { get; set; } = true;
 
 		public string? NewMessage { get; set; }
 
@@ -64,9 +65,12 @@ namespace web.Pages
 			{
 				if (string.IsNullOrEmpty(NewMessage))
 					return;
-
-				var base64Msg = Convert.ToBase64String(Encoding.UTF8.GetBytes(NewMessage));
-                await AzureStorage!.Queues.CreateMessageAsync(CurrentQueue, base64Msg);
+				var msgToPass = string.Empty;
+				if (IsBase64)
+					msgToPass = Convert.ToBase64String(Encoding.UTF8.GetBytes(NewMessage));
+				else
+					msgToPass = NewMessage;
+				await AzureStorage!.Queues.CreateMessageAsync(CurrentQueue, msgToPass);
 				NewMessage = string.Empty;
 				await LoadMessages();
 			}
