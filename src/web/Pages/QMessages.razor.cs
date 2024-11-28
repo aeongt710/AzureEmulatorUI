@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using StorageLibrary.Common;
+using System.Text;
 
 namespace web.Pages
 {
@@ -64,7 +65,8 @@ namespace web.Pages
 				if (string.IsNullOrEmpty(NewMessage))
 					return;
 
-				await AzureStorage!.Queues.CreateMessageAsync(CurrentQueue, NewMessage);
+				var base64Msg = Convert.ToBase64String(Encoding.UTF8.GetBytes(NewMessage));
+                await AzureStorage!.Queues.CreateMessageAsync(CurrentQueue, base64Msg);
 				NewMessage = string.Empty;
 				await LoadMessages();
 			}
